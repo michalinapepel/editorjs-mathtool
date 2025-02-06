@@ -1,14 +1,15 @@
-import { useEffect, useRef } from "react";
-import EditorJS from "@editorjs/editorjs";
-import MathTool from "./tools/math";
-import List from "@editorjs/list";
-import Header from "@editorjs/header";
+import { useEffect, useRef } from "react"
+import EditorJS from "@editorjs/editorjs"
+import MathTool from "./tools/math"
+import List from "@editorjs/list"
+import Header from "@editorjs/header"
+import React from "react"
 
 export default function App() {
-  const ejInstance = useRef(null);
+  const ejInstance = useRef(null)
   useEffect(() => {
     if (ejInstance.current) {
-      ejInstance.current.destroy();
+      ejInstance.current.destroy()
     }
     const editor = new EditorJS({
       holder: "editorjs",
@@ -22,26 +23,28 @@ export default function App() {
       },
 
       onReady: () => {
-        ejInstance.current = editor;
-        console.log("ready");
+        ejInstance.current = editor
+        console.log("ready")
       },
       autofocus: true,
       onChange: async () => {
-        const content = await editor.save();
-        console.log(content);
+        const content = await editor.save()
+        console.log(content)
       },
-    });
+    })
 
     return () => {
-      ejInstance.current?.destroy();
-      ejInstance.current = null;
-    };
-  }, []);
+      if (ejInstance.current) {
+        ejInstance.current.destroy()
+        ejInstance.current = null
+      }
+    }
+  }, [])
 
   return (
     <>
       <h1>EDITOR</h1>
       <div id="editorjs"></div>
     </>
-  );
+  )
 }
