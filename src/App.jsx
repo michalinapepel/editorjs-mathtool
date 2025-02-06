@@ -17,6 +17,9 @@ export default function App() {
         list: List,
         math: MathTool,
       },
+      data: {
+        blocks: [{ type: "math", data: { math: "2*2=4" } }],
+      },
 
       onReady: () => {
         ejInstance.current = editor;
