@@ -9,6 +9,10 @@ export default class MathTool {
     };
   }
 
+  constructor({ data }) {
+    this.data = data;
+  }
+
   // Render the tool's UI
   render() {
     const container = document.createElement("div");
@@ -20,7 +24,7 @@ export default class MathTool {
   // Initialize the Mathfield
   renderMathfield(container) {
     const mathfield = new MathfieldElement();
-    mathfield.value = "e=mc^2"; //default placeholder
+    mathfield.value = this.data.math || "e=mc^2"; //default placeholder
     container.appendChild(mathfield); // Append the Mathfield to the container
 
     // Set up event listener for content changes
