@@ -16,11 +16,10 @@ export default function App() {
       tools: {
         header: Header,
         list: List,
-        math: MathTool,
-        test: TestPlugin
+        math: MathTool
       },
       data: {
-        blocks: [{ type: "math", data: { math: "2*2=4" } }],
+        blocks: [{type: "paragraph", data: {text: "Hello!"}},{type: "paragraph", data: {text: "world..."}}, { type: "math", data: { math: "2*2=4" } }],
       },
 
       onReady: () => {
