@@ -3,7 +3,6 @@ import EditorJS from "@editorjs/editorjs";
 import MathTool from "./tools/math";
 import List from "@editorjs/list";
 import Header from "@editorjs/header";
-import TestPlugin from "./tools/testPlugin";
 
 export default function App() {
   const ejInstance = useRef(null);
