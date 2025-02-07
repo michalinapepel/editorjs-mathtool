@@ -3,6 +3,7 @@ import EditorJS from "@editorjs/editorjs";
 import MathTool from "./tools/math";
 import List from "@editorjs/list";
 import Header from "@editorjs/header";
+import TestPlugin from "./tools/testPlugin";
 
 export default function App() {
   const ejInstance = useRef(null);
@@ -16,6 +17,7 @@ export default function App() {
         header: Header,
         list: List,
         math: MathTool,
+        test: TestPlugin
       },
       data: {
         blocks: [{ type: "math", data: { math: "2*2=4" } }],
@@ -41,7 +43,7 @@ export default function App() {
   return (
     <>
       <h1>EDITOR</h1>
-      <div id="editorjs"></div>
+      <div id="editorjs" style={{minWidth: "24rem"}}></div>
     </>
   );
 }
