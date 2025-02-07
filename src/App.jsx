@@ -15,10 +15,10 @@ export default function App() {
       tools: {
         header: Header,
         list: List,
-        math: MathTool,
+        math: MathTool
       },
       data: {
-        blocks: [{ type: "math", data: { math: "2*2=4" } }],
+        blocks: [{type: "paragraph", data: {text: "Hello!"}},{type: "paragraph", data: {text: "world..."}}, { type: "math", data: { math: "2*2=4" } }],
       },
 
       onReady: () => {
@@ -41,7 +41,7 @@ export default function App() {
   return (
     <>
       <h1>EDITOR</h1>
-      <div id="editorjs"></div>
+      <div id="editorjs" style={{minWidth: "24rem"}}></div>
     </>
   );
 }

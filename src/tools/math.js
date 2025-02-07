@@ -9,41 +9,75 @@ export default class MathTool {
     };
   }
 
-  constructor({ data }) {
+  constructor({ data, api, config, readOnly, block }) {
     this.data = data;
+    this.api = api;
+    this.config = config;
+    this.readOnly = readOnly;
+    this.block = block;
+  }
+
+  renderTextContentHolder(container) {
+    // As editor js api is dumb and considers a block empty when it has no text content inside HTML markup,
+    // we define a hidden div element to hold the text content of the mathfield
+    // Sources: 
+    // - https://github.com/search?q=repo%3Acodex-team/editor.js%20isEmpty&type=code
+    // - https://github.com/codex-team/editor.js/blob/7399e55f7e2ea6cf019cf659cb6cbd937e7d2e0c/src/components/block/index.ts#L397
+    // - https://github.com/search?q=repo%3Acodex-team%2Feditor.js+pluginsContent&type=code
+    // - https://github.com/codex-team/editor.js/blob/7399e55f7e2ea6cf019cf659cb6cbd937e7d2e0c/src/components/dom.ts#L402
+    // - https://github.com/codex-team/editor.js/blob/7399e55f7e2ea6cf019cf659cb6cbd937e7d2e0c/src/components/block/index.ts#L397
+    const textContentHolder = document.createElement("div");
+    textContentHolder.id = "math-latex-content-holder";
+    textContentHolder.style.display = "none";
+    this.textContentHolder = textContentHolder;
+    // Initialize the hidden text content holder. According to this initialization, renderMathfield() must be called before this method
+    this.textContentHolder.innerHTML = this.mathfield.value;
+    container.appendChild(this.textContentHolder);
   }
 
   // Render the tool's UI
   render() {
     const container = document.createElement("div");
-    container.classList.add("math-editor");
     this.renderMathfield(container); // Initialize the Mathfield
+    this.renderTextContentHolder(container);
     return container;
   }
 
   // Initialize the Mathfield
   renderMathfield(container) {
-    const mathfield = new MathfieldElement();
-    mathfield.value = this.data.math || "e=mc^2"; //default placeholder
-    container.appendChild(mathfield); // Append the Mathfield to the container
+    this.mathfield = new MathfieldElement();
+    this.mathfield.value = this.data.math || "e=mc^2"; //default placeholder
+    this.mathfield.style.width = "100%";
+    container.appendChild(this.mathfield); // Append the Mathfield to the container
 
-    // Set up event listener for content changes
-    mathfield.addEventListener("input", () => {
-      //console.log(mathfield.value); // Log the current value
-    });
+    this.mathfield.addEventListener("input", (e) => this.handleMathfieldInput(e)); // Handle input events for mathfield
+  }
+
+  /**
+   * Handle input events for mathfield
+   * @param {InputEvent} e input event
+   */
+  handleMathfieldInput(e) {
+    console.log(e);
+    this.block.save().then();
+    this.data.math = this.mathfield.value; // Update the data on input
+    this.textContentHolder.innerHTML = this.mathfield.value; // Update the hidden text content holder
+    
+    console.log(this.mathfield.value);
+    console.log(this.block.isEmpty);
   }
 
   // Save the content of the Mathfield
   save(blockContent) {
-    const mathfield = blockContent.querySelector("math-field");
+    console.log("Save function called. Mathfield value: ", this.mathfield.value);
     return {
-      math: mathfield.value, // Save the math expression
+      math: this.mathfield.value, // Save the math expression
     };
   }
 
   // Validate the saved data
   validate(savedData) {
-    console.log(savedData);
+    console.log("Validate function called. Saved data: ", savedData);
     return savedData.math.trim() !== ""; // Ensure math expression is not empty
   }
 }
